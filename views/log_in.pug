@@ -1,0 +1,23 @@
+extends layout 
+
+block content 
+    h1=title
+
+    if currentUser 
+        p you are already logged in
+    else
+        form(action="" method="post")
+            div 
+                label(for="username") username 
+                input(type="text" name="username" id="username" value=(undefined===username ? '' : username) required)
+            div
+                label(for="password") password 
+                input(type="password" name="password" id="password" required)
+            div 
+                button(type="submit") log in
+        
+        if errors
+            div
+                ul
+                    for error in errors
+                        li!=error.msg
