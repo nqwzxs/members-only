@@ -1,0 +1,60 @@
+extends layout 
+
+block content
+    h1=title
+    if currentUser
+        p welcome back to #{title}, #{currentUser.name}
+
+        if currentUser.admin
+            p you are currently an admin  
+        else if currentUser.membership_status 
+            p you are currently a member 
+        else
+            p you are currently not a member
+
+        if !currentUser.membership_status
+            a(href="/join-club")
+                button join the club
+        a(href="/log-out")
+            button log out
+            
+    else 
+        p welcome to #{title}, guest
+
+        a(href="/sign-up")
+            button sign up
+        a(href="/log-in")
+            button log in
+
+    h2 chat
+    div
+        if currentUser 
+            form(action="/message/new", method="post")
+                div 
+                    textarea(name="text", cols="30", rows="5" required)
+                button(type="submit") new message
+            
+            if errors
+                div
+                    ul
+                        for error in errors
+                            li!=error.msg
+    
+    if messages
+        div 
+            for message in messages
+                p
+                    if message.author
+                        |#{message.author.name}: 
+                    else 
+                        |anon: 
+
+                    |#{message.text} 
+
+                    if message.date_created 
+                        |(#{message.elapsed})
+
+                    if currentUser && currentUser.admin
+                        form(action="/message/delete", method="post")
+                            input(type='hidden', name='messageid', value=message._id )
+                            button(type="submit") delete
