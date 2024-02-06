@@ -1,0 +1,26 @@
+extends layout 
+
+block content 
+    h1=title
+
+    if currentUser
+        if currentUser.membership_status 
+            p you are already member of the club 
+        else 
+            form(action="" method="post")
+                div 
+                    label(for="secret-passphrase") secret passphrase 
+                    input(type="text" name="secret-passphrase" id="secret-passphrase" required)
+                div 
+                    button(type="submit") join the club
+
+            
+            if errors
+                div
+                    ul
+                        for error in errors
+                            li!=error.msg
+    else
+        p you are not logged in 
+        a(href="/log-in")
+            button log in
